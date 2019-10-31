@@ -19,8 +19,8 @@ def butter_lowpass_filter(data, cutoff, freq, order=5):
 
 # Filter requirements.
 order = 6
-fs = 30.0       # sample rate, Hz
-cutoff = 3.667  # desired cutoff frequency of the filter, Hz
+sr = 705000.0       # sample rate, Hz
+cutoff = 100  # desired cutoff frequency of the filter, Hz
 
 
 spf = wave.open('C:/Users/zj6pz3/PycharmProjects/Tactical_headphones/gunfire.wav', 'r')
@@ -44,13 +44,48 @@ Time = np.linspace(0, len(signal)/2/fs, num=len(signal)/2)
 # plt.title('Signal Wave...')
 # plt.plot(Time, mono)
 # plt.show()
-T = 1/705000
+T = 1/sr
 N = len(mono)
 
-yf = np.fft.fft(mono)
+
+
+b, a = butter_lowpass(cutoff, sr, order)
+
+w, h = freqz(b, a, worN=8000)
+# plt.subplot(2, 1, 1)
+# plt.plot(0.5*sr*w/np.pi, np.abs(h), 'b')
+# plt.plot(cutoff, 0.5*np.sqrt(2), 'ko')
+# plt.axvline(cutoff, color='k')
+# plt.xlim(0, 0.5*fs)
+# plt.title("Lowpass Filter Frequency Response")
+# plt.xlabel('Frequency [Hz]')
+# plt.grid()
+# plt.show()
+
+
 xf = np.linspace(0.0, 1.0/(2.0*T), N//2)
 
-fig, (ax1, ax2) = plt.subplots(1, 2)
-ax1.plot(xf, 2.0/N * np.abs(yf[:N//2]))
-ax2.plot(Time, mono)
+# Filter the data, and plot both the original and filtered signals.
+filtered = butter_lowpass_filter(mono, cutoff, sr, order)
+
+plt.subplot(2, 1, 2)
+plt.plot(Time, mono, 'b-', label='data')
+plt.plot(xf, mono, 'g-', linewidth=2, label='filtered data')
+plt.xlabel('Time [sec]')
+plt.grid()
+plt.legend()
+
+plt.subplots_adjust(hspace=0.35)
 plt.show()
+
+
+
+#
+#
+# yf = np.fft.fft(mono)
+# xf = np.linspace(0.0, 1.0/(2.0*T), N//2)
+#
+# fig, (ax1, ax2) = plt.subplots(1, 2)
+# ax1.plot(xf, 2.0/N * np.abs(yf[:N//2]))
+# ax2.plot(Time, mono)
+# plt.show()
