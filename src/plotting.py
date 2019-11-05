@@ -9,7 +9,7 @@ def plot_two_sep(first, caption_first, first_t, second, caption_second, second_t
     plt.subplot(2, 1, 1)
     plt.plot(first_t, first, 'b-', linewidth=0.5, label=caption_first)
     plt.legend()
-    plt.xlim(right=0.3, left=-0.01)
+    plt.xlim(right=0.2, left=-0.01)
     plt.grid()
     plt.subplot(2, 1, 2)
     plt.plot(second_t, second, 'g-', linewidth=0.5, label=caption_second, scalex=0.1)
